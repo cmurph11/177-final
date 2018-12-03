@@ -1,49 +1,105 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<script lang="javascript" src="crimes.js"></script>
+<script lang="javascript" src="crimes_parsed.js"></script>
 <script>
 
-const DATE_INDEX = 8;
+// load data from file
+var crimes = data;
 
-var crimes = crime_data["data"];
-var crimes_by_year = {2012: 0, 2013: 0, 2014: 0, 2015: 0, 2016: 0, 2017: 0, 2018: 0};
-var num_crimes = crimes.length;
-
-for (var i = 0; i < num_crimes; i++) {
-	var this_year = new Date(crimes[i][DATE_INDEX]);
-	this_year = this_year.getFullYear();
-	crimes_by_year[this_year]++;
+// Compute average # of violent crimes per month for a given start month/year
+// and end month/year
+// Note : start and end year must be consecutive years! This works because a
+// football season can occur in no more than two calendar years.
+function avg_crime_per_month_in(start_year, start_month, end_year, end_month) {
+	var crimes_per_month = [];
+	for (var i = start_month; i < 12; i++) {
+		var sum = crimes[start_year][i]["AGG. ASSAULT"]
+							+ crimes[start_year][i]["ASSAULT BY THREAT"]
+							+ crimes[start_year][i]["COMMON ASSAULT"]
+							+ crimes[start_year][i]["HOMICIDE"]
+							+ crimes[start_year][i]["RAPE"];
+		crimes_per_month.push(sum);
+  }
+	if (start_year != end_year) {
+		for (var i = 0; i <= end_month; i++) {
+			var sum = crimes[end_year][i]["AGG. ASSAULT"]
+								+ crimes[end_year][i]["ASSAULT BY THREAT"]
+								+ crimes[end_year][i]["COMMON ASSAULT"]
+								+ crimes[end_year][i]["HOMICIDE"]
+								+ crimes[end_year][i]["RAPE"];
+			crimes_per_month.push(sum);
+		}
+	}
+	return average(crimes_per_month);
 }
 
-console.log(crimes_by_year);
+function average(arr) {
+	var total = 0;
+	for (var i = 0; i < arr.length; i++) {
+			total += arr[i];
+	}
+	return total / arr.length;
+}
+
+function pickColor(year) {
+	return "#f00fff";
+}
+
+function tooltip(year) {
+	return "<p><b>Season: </b>" + year + "</p><p><b>% of games won: </b>" + 50 + "</p>";
+}
 
 window.onload = function () {
 
+// Calculate "crime rate" for each football Season
+// where "crime rate" is defined by average number of
+// violent crimes reported per month
+var avg_crime_rate_by_year = {};
+
+// 2012 season spans September 2012 through February 2013
+avg_crime_rate_by_year[2012] = avg_crime_per_month_in(2012, 08, 2013, 01);
+// 2013 season spans September 2013 through December 2013
+avg_crime_rate_by_year[2013] = avg_crime_per_month_in(2013, 08, 2013, 11);
+// 2013 season spans September 2014 through January 2015
+avg_crime_rate_by_year[2014] = avg_crime_per_month_in(2014, 08, 2015, 0);
+// 2013 season spans September 2015 through January 2016
+avg_crime_rate_by_year[2015] = avg_crime_per_month_in(2015, 08, 2016, 0);
+// 2013 season spans September 2016 through January 2017
+avg_crime_rate_by_year[2016] = avg_crime_per_month_in(2016, 08, 2017, 0);
+// 2013 season spans September 2017 through December 2017
+avg_crime_rate_by_year[2017] = avg_crime_per_month_in(2017, 08, 2017, 11);
+
+// Render canvas.js chart with overview data for each season
 var chart = new CanvasJS.Chart("chartContainer", {
 	animationEnabled: true,
-	theme: "light2", // "light1", "light2", "dark1", "dark2"
 	title:{
-		text: "Baltimore Ravens: Season Record and Violent Crime"
+		text: "Baltimore Ravens Season Performance and Violent Crime"
 	},
 	axisY: {
-		title: "Violent Crimes Reported",
-		maximum: 20000,
-		minimum: 1000,
+		title: "Average Violent Crimes Reported per Month",
+		maximum: 1600,
+		minimum: 500,
 	},
-
+	axisX: {
+			title: "NFL Season"
+	},
 	data: [{
 		type: "column",
-		showInLegend: true,
-		legendMarkerColor: "grey",
-		legendText: "Year",
+		showInLegend: false,
 		dataPoints: [
-			{ y: crimes_by_year[2012], label: "2012" },
-			{ y: crimes_by_year[2013],  label: "2013" },
-			{ y: crimes_by_year[2014],  label: "2014" },
-			{ y: crimes_by_year[2015],  label: "2015" },
-			{ y: crimes_by_year[2016],  label: "2016" },
-			{ y: crimes_by_year[2017],  label: "2017" },
+			{ y: avg_crime_rate_by_year[2012], label: "2012",
+					toolTipContent: tooltip(2012), color: pickColor(2012) },
+			{ y: avg_crime_rate_by_year[2013],  label: "2013",
+					toolTipContent: tooltip(2013), color: pickColor(2013) },
+			{ y: avg_crime_rate_by_year[2014],  label: "2014",
+					toolTipContent: tooltip(2014), color: pickColor(2014) },
+			{ y: avg_crime_rate_by_year[2015],  label: "2015",
+					toolTipContent: tooltip(2015), color: pickColor(2015)},
+			{ y: avg_crime_rate_by_year[2016],  label: "2016",
+					toolTipContent: tooltip(2016), color: pickColor(2016) },
+			{ y: avg_crime_rate_by_year[2017],  label: "2017",
+			 		toolTipContent: tooltip(2017), color: pickColor(2017) },
 		]
 	}]
 });
