@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<script lang="javascript" src="crimes.js"></script>
+<script>
+
+const DATE_INDEX = 8;
+
+var crimes = crime_data["data"];
+var crimes_by_year = {2012: 0, 2013: 0, 2014: 0, 2015: 0, 2016: 0, 2017: 0, 2018: 0};
+var num_crimes = crimes.length;
+
+for (var i = 0; i < num_crimes; i++) {
+	var this_year = new Date(crimes[i][DATE_INDEX]);
+	this_year = this_year.getFullYear();
+	crimes_by_year[this_year]++;
+}
+
+console.log(crimes_by_year);
+
+window.onload = function () {
+
+var chart = new CanvasJS.Chart("chartContainer", {
+	animationEnabled: true,
+	theme: "light2", // "light1", "light2", "dark1", "dark2"
+	title:{
+		text: "Baltimore Ravens: Season Record and Violent Crime"
+	},
+	axisY: {
+		title: "Violent Crimes Reported",
+		maximum: 20000,
+		minimum: 1000,
+	},
+
+	data: [{
+		type: "column",
+		showInLegend: true,
+		legendMarkerColor: "grey",
+		legendText: "Year",
+		dataPoints: [
+			{ y: crimes_by_year[2012], label: "2012" },
+			{ y: crimes_by_year[2013],  label: "2013" },
+			{ y: crimes_by_year[2014],  label: "2014" },
+			{ y: crimes_by_year[2015],  label: "2015" },
+			{ y: crimes_by_year[2016],  label: "2016" },
+			{ y: crimes_by_year[2017],  label: "2017" },
+		]
+	}]
+});
+chart.render();
+
+}
+</script>
+</head>
+<body>
+<div id="chartContainer" style="height: 100%; width: 100%;"></div>
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+</body>
+</html>
+
+
+
