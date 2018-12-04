@@ -67,7 +67,8 @@ function average(arr) {
 
 function pickColor(year) {
 	var final = scores[year][0].FINAL-45;
-	return rgbToHex(Math.floor(12*final),0,130);
+	console.log()
+	return rgbToHex(0,Math.floor(12*final),Math.floor(12*final));
 }
 
 function componentToHex(c) {
@@ -114,7 +115,7 @@ season_colors[2018] = pickColor(2018);
 			datasets: [{
 				label: 'Monthly crime rate',
 				borderWidth: 1,
-				data: [
+				data: [ 
 					avg_crime_rate_by_year[2012],
 					avg_crime_rate_by_year[2013],
 					avg_crime_rate_by_year[2014],
