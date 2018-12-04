@@ -5,6 +5,8 @@
 	<title>Bar Chart</title>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.bundle.js"></script>
 	<script src = "https://www.chartjs.org/samples/latest/utils.js"></script>
+	<script lang = "javascript" src = "crimes_parsed.js"></script>
+	<script lang = "javascript" src = "scores.js"></script>
 	<style>
 	canvas {
 		-moz-user-select: none;
@@ -24,40 +26,113 @@
 	<button id="addData">Add Data</button>
 	<button id="removeData">Remove Data</button>
 	<script>
+
+
+// load data from file
+var crimes = seasons;
+var stats = scores;
+// Compute average # of violent crimes per month for a given start month/year
+// and end month/year
+// Note : start and end year must be consecutive years! This works because a
+// football season can occur in no more than two calendar years.
+function avg_crime_per_month_in(start_year, start_month, end_year, end_month) {
+	var crimes_per_month = [];
+	for (var i = start_month; i < 12; i++) {
+		var sum = crimes[start_year][i]["AGG. ASSAULT"]
+							+ crimes[start_year][i]["ASSAULT BY THREAT"]
+							+ crimes[start_year][i]["COMMON ASSAULT"]
+							+ crimes[start_year][i]["HOMICIDE"]
+							+ crimes[start_year][i]["RAPE"];
+		crimes_per_month.push(sum);
+  }
+	if (start_year != end_year) {
+		for (var i = 0; i <= end_month; i++) {
+			var sum = crimes[end_year][i]["AGG. ASSAULT"]
+								+ crimes[end_year][i]["ASSAULT BY THREAT"]
+								+ crimes[end_year][i]["COMMON ASSAULT"]
+								+ crimes[end_year][i]["HOMICIDE"]
+								+ crimes[end_year][i]["RAPE"];
+			crimes_per_month.push(sum);
+		}
+	}
+	return average(crimes_per_month);
+}
+function average(arr) {
+	var total = 0;
+	for (var i = 0; i < arr.length; i++) {
+			total += arr[i];
+	}
+	return total / arr.length;
+}
+
+function pickColor(year) {
+	var final = scores[year][0].FINAL-45;
+	return rgbToHex(Math.floor(12*final),0,130);
+}
+
+function componentToHex(c) {
+    var hex = c.toString(16);
+    return hex.length == 1 ? "0" + hex : hex;
+}
+
+function rgbToHex(r, g, b) {
+    return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+}
+
+function tooltip(year) {
+	return "<p><b>Season: </b>" + year + "</p><p><b>% of games won: </b>" + 50 + "</p>";
+}
+
+// Calculate "crime rate" for each football Season
+// where "crime rate" is defined by average number of
+// violent crimes reported per month
+var avg_crime_rate_by_year = {};
+avg_crime_rate_by_year[2012] = avg_crime_per_month_in(2012, 08, 2013, 01);
+avg_crime_rate_by_year[2013] = avg_crime_per_month_in(2013, 08, 2013, 11);
+avg_crime_rate_by_year[2014] = avg_crime_per_month_in(2014, 08, 2015, 0);
+avg_crime_rate_by_year[2015] = avg_crime_per_month_in(2015, 08, 2016, 0);
+avg_crime_rate_by_year[2016] = avg_crime_per_month_in(2016, 08, 2017, 0);
+avg_crime_rate_by_year[2017] = avg_crime_per_month_in(2017, 08, 2017, 11);
+avg_crime_rate_by_year[2018] = avg_crime_per_month_in(2018, 08, 2017, 10);
+
+var season_colors = {};
+
+season_colors[2012] = pickColor(2012);
+season_colors[2013] = pickColor(2013);
+season_colors[2014] = pickColor(2014);
+season_colors[2015] = pickColor(2015);
+season_colors[2016] = pickColor(2016);
+season_colors[2017] = pickColor(2017);
+season_colors[2018] = pickColor(2018);
+
+
 		var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 		var color = Chart.helpers.color;
+		var color12 = pickColor(2012);
 		var barChartData = {
-			labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+			labels: ['2012', '2013', '2014', '2015', '2016', '2017', '2018'],
 			datasets: [{
-				label: 'Dataset 1',
-				backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
-				borderColor: window.chartColors.red,
+				label: 'Monthly crime rate',
 				borderWidth: 1,
 				data: [
-					randomScalingFactor(),
-					randomScalingFactor(),
-					randomScalingFactor(),
-					randomScalingFactor(),
-					randomScalingFactor(),
-					randomScalingFactor(),
-					randomScalingFactor()
-				]
-			}, {
-				label: 'Dataset 2',
-				backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
-				borderColor: window.chartColors.blue,
-				borderWidth: 1,
-				data: [
-					randomScalingFactor(),
-					randomScalingFactor(),
-					randomScalingFactor(),
-					randomScalingFactor(),
-					randomScalingFactor(),
-					randomScalingFactor(),
-					randomScalingFactor()
+					avg_crime_rate_by_year[2012],
+					avg_crime_rate_by_year[2013],
+					avg_crime_rate_by_year[2014],
+					avg_crime_rate_by_year[2015],
+					avg_crime_rate_by_year[2016],
+					avg_crime_rate_by_year[2017],
+					avg_crime_rate_by_year[2018]
+				],
+				backgroundColor: [
+					season_colors[2012],
+					season_colors[2013],
+					season_colors[2014],
+					season_colors[2015],
+					season_colors[2016],
+					season_colors[2017],
+					season_colors[2018]
 				]
 			}]
-
 		};
 
 		window.onload = function() {
@@ -72,7 +147,14 @@
 					},
 					title: {
 						display: true,
-						text: 'Chart.js Bar Chart'
+						text: 'Baltimore Ravens: Season Record and Violent Crime'
+					},
+					scales: {
+						yAxes:[{
+							ticks: {
+								beginAtZero: true
+							}
+						}]
 					}
 				}
 			});
