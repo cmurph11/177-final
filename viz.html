@@ -89,7 +89,8 @@ var chart = new CanvasJS.Chart("chartContainer", {
 		showInLegend: false,
 		dataPoints: [
 			{ y: avg_crime_rate_by_year[2012], label: "2012",
-					toolTipContent: tooltip(2012), color: pickColor(2012) },
+					toolTipContent: tooltip(2012), color: pickColor(2012),
+				 	click: zoomChart(2012) },
 			{ y: avg_crime_rate_by_year[2013],  label: "2013",
 					toolTipContent: tooltip(2013), color: pickColor(2013) },
 			{ y: avg_crime_rate_by_year[2014],  label: "2014",
@@ -104,6 +105,11 @@ var chart = new CanvasJS.Chart("chartContainer", {
 	}]
 });
 chart.render();
+
+function zoomChart(year) {
+	chart.options.title.text = year + " Season Statistics";
+	chart.render();
+}
 
 }
 </script>
