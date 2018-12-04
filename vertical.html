@@ -68,7 +68,7 @@ function average(arr) {
 function pickColor(year) {
 	var final = scores[year][0].FINAL-45;
 	console.log()
-	return rgbToHex(0,Math.floor(12*final),Math.floor(12*final));
+	return rgbToHex(255-Math.floor(12*final),0,Math.floor(12*final));
 }
 
 function componentToHex(c) {
