@@ -31,6 +31,15 @@
 // load data from file
 var crimes = seasons;
 var stats = scores;
+
+function crime_rate_in(year, month) {
+	return crimes[year][month]["AGG. ASSAULT"]
+		+ crimes[year][month]["ASSAULT BY THREAT"]
+		+ crimes[year][month]["COMMON ASSAULT"]
+		+ crimes[year][month]["HOMICIDE"]
+		+ crimes[year][month]["RAPE"];			
+}
+
 // Compute average # of violent crimes per month for a given start month/year
 // and end month/year
 // Note : start and end year must be consecutive years! This works because a
@@ -38,25 +47,18 @@ var stats = scores;
 function avg_crime_per_month_in(start_year, start_month, end_year, end_month) {
 	var crimes_per_month = [];
 	for (var i = start_month; i < 12; i++) {
-		var sum = crimes[start_year][i]["AGG. ASSAULT"]
-							+ crimes[start_year][i]["ASSAULT BY THREAT"]
-							+ crimes[start_year][i]["COMMON ASSAULT"]
-							+ crimes[start_year][i]["HOMICIDE"]
-							+ crimes[start_year][i]["RAPE"];
+		var sum = crime_rate_in(start_year, i);
 		crimes_per_month.push(sum);
   }
 	if (start_year != end_year) {
 		for (var i = 0; i <= end_month; i++) {
-			var sum = crimes[end_year][i]["AGG. ASSAULT"]
-								+ crimes[end_year][i]["ASSAULT BY THREAT"]
-								+ crimes[end_year][i]["COMMON ASSAULT"]
-								+ crimes[end_year][i]["HOMICIDE"]
-								+ crimes[end_year][i]["RAPE"];
+			var sum = crime_rate_in(end_year, i);
 			crimes_per_month.push(sum);
 		}
 	}
 	return average(crimes_per_month);
 }
+
 function average(arr) {
 	var total = 0;
 	for (var i = 0; i < arr.length; i++) {
@@ -68,7 +70,7 @@ function average(arr) {
 function pickColor(year) {
 	var final = scores[year][0].FINAL-45;
 	console.log()
-	return rgbToHex(255-Math.floor(12*final),0,Math.floor(12*final));
+	return rgbToHex(255-Math.floor(12*final),Math.floor(12*final),0);
 }
 
 function componentToHex(c) {
@@ -88,13 +90,13 @@ function tooltip(year) {
 // where "crime rate" is defined by average number of
 // violent crimes reported per month
 var avg_crime_rate_by_year = {};
-avg_crime_rate_by_year[2012] = avg_crime_per_month_in(2012, 08, 2013, 01);
-avg_crime_rate_by_year[2013] = avg_crime_per_month_in(2013, 08, 2013, 11);
-avg_crime_rate_by_year[2014] = avg_crime_per_month_in(2014, 08, 2015, 0);
-avg_crime_rate_by_year[2015] = avg_crime_per_month_in(2015, 08, 2016, 0);
-avg_crime_rate_by_year[2016] = avg_crime_per_month_in(2016, 08, 2017, 0);
-avg_crime_rate_by_year[2017] = avg_crime_per_month_in(2017, 08, 2017, 11);
-avg_crime_rate_by_year[2018] = avg_crime_per_month_in(2018, 08, 2017, 10);
+avg_crime_rate_by_year[2012] = avg_crime_per_month_in(2012, 8, 2013, 1);
+avg_crime_rate_by_year[2013] = avg_crime_per_month_in(2013, 8, 2013, 11);
+avg_crime_rate_by_year[2014] = avg_crime_per_month_in(2014, 8, 2015, 0);
+avg_crime_rate_by_year[2015] = avg_crime_per_month_in(2015, 8, 2016, 0);
+avg_crime_rate_by_year[2016] = avg_crime_per_month_in(2016, 8, 2017, 0);
+avg_crime_rate_by_year[2017] = avg_crime_per_month_in(2017, 8, 2017, 11);
+avg_crime_rate_by_year[2018] = avg_crime_per_month_in(2018, 8, 2018, 10);
 
 var season_colors = {};
 
@@ -107,120 +109,269 @@ season_colors[2017] = pickColor(2017);
 season_colors[2018] = pickColor(2018);
 
 
-		var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-		var color = Chart.helpers.color;
-		var color12 = pickColor(2012);
-		var barChartData = {
-			labels: ['2012', '2013', '2014', '2015', '2016', '2017', '2018'],
-			datasets: [{
-				label: 'Monthly crime rate',
-				borderWidth: 1,
-				data: [ 
-					avg_crime_rate_by_year[2012],
-					avg_crime_rate_by_year[2013],
-					avg_crime_rate_by_year[2014],
-					avg_crime_rate_by_year[2015],
-					avg_crime_rate_by_year[2016],
-					avg_crime_rate_by_year[2017],
-					avg_crime_rate_by_year[2018]
-				],
-				backgroundColor: [
-					season_colors[2012],
-					season_colors[2013],
-					season_colors[2014],
-					season_colors[2015],
-					season_colors[2016],
-					season_colors[2017],
-					season_colors[2018]
-				]
-			}]
-		};
+var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+var color = Chart.helpers.color;
+var color12 = pickColor(2012);
+var yearlyOverview = {
+	labels: ['2012', '2013', '2014', '2015', '2016', '2017', '2018'],
+	datasets: [{
+		label: 'Monthly crime rate per NFL season',
+		borderWidth: 1,
+		data: [ 
+			avg_crime_rate_by_year[2012],
+			avg_crime_rate_by_year[2013],
+			avg_crime_rate_by_year[2014],
+			avg_crime_rate_by_year[2015],
+			avg_crime_rate_by_year[2016],
+			avg_crime_rate_by_year[2017],
+			avg_crime_rate_by_year[2018]
+		],
+		backgroundColor: [
+			season_colors[2012],
+			season_colors[2013],
+			season_colors[2014],
+			season_colors[2015],
+			season_colors[2016],
+			season_colors[2017],
+			season_colors[2018]
+		],
+	}]
+};
 
-		window.onload = function() {
-			var ctx = document.getElementById('canvas').getContext('2d');
-			window.myBar = new Chart(ctx, {
-				type: 'bar',
-				data: barChartData,
-				options: {
-					responsive: true,
-					legend: {
-						position: 'top',
-					},
-					title: {
-						display: true,
-						text: 'Baltimore Ravens: Season Record and Violent Crime'
-					},
-					scales: {
-						yAxes:[{
-							ticks: {
-								beginAtZero: true
-							}
-						}]
+var monthly_datasets = {};
+monthly_datasets[2012] = {
+	labels: ['September', 'October', 'November', 'December', 'January', 'February'],
+	datasets: [{
+		label: 'Monthly crime rate during the 2012 NFL season',
+		borderWidth: 1,
+		data: [
+			crime_rate_in(2012, 8),
+			crime_rate_in(2012, 9),
+			crime_rate_in(2012, 10),
+			crime_rate_in(2012, 11),
+			crime_rate_in(2013, 0),
+			crime_rate_in(2013, 1),
+		],
+	}]
+};
+monthly_datasets[2013] = {
+	labels: ['September', 'October', 'November', 'December'],
+	datasets: [{
+		label: 'Monthly crime rate during the 2013 NFL season',
+		borderWidth: 1,
+		data: [
+			crime_rate_in(2013, 8),
+			crime_rate_in(2013, 9),
+			crime_rate_in(2013, 10),
+			crime_rate_in(2013, 11),
+		],
+	}]
+}
+monthly_datasets[2014] = {
+	labels: ['September', 'October', 'November', 'December', 'January'],
+	datasets: [{
+		label: 'Monthly crime rate during the 2014 NFL season',
+		borderWidth: 1,
+		data: [
+			crime_rate_in(2014, 8),
+			crime_rate_in(2014, 9),
+			crime_rate_in(2014, 10),
+			crime_rate_in(2014, 11),
+			crime_rate_in(2015, 0),
+		],
+	}]
+}
+monthly_datasets[2015] = {
+	labels: ['September', 'October', 'November', 'December', 'January'],
+	datasets: [{
+		label: 'Monthly crime rate during the 2015 NFL season',
+		borderWidth: 1,
+		data: [
+			crime_rate_in(2015, 8),
+			crime_rate_in(2015, 9),
+			crime_rate_in(2015, 10),
+			crime_rate_in(2015, 11),
+			crime_rate_in(2016, 0),
+		],
+	}]
+}
+monthly_datasets[2016] = {
+	labels: ['September', 'October', 'November', 'December', 'January'],
+	datasets: [{
+		label: 'Monthly crime rate during the 2016 NFL season',
+		borderWidth: 1,
+		data: [
+			crime_rate_in(2016, 8),
+			crime_rate_in(2016, 9),
+			crime_rate_in(2016, 10),
+			crime_rate_in(2016, 11),
+			crime_rate_in(2017, 0),
+		],
+	}]
+}
+monthly_datasets[2017] = {
+	labels: ['September', 'October', 'November', 'December'],
+	datasets: [{
+		label: 'Monthly crime rate during the 2017 NFL season',
+		borderWidth: 1,
+		data: [
+			crime_rate_in(2017, 8),
+			crime_rate_in(2017, 9),
+			crime_rate_in(2017, 10),
+			crime_rate_in(2017, 11),
+		],
+	}]
+}
+
+
+window.onload = function() {
+	var ctx = document.getElementById('canvas').getContext('2d');
+	window.myBar = new Chart(ctx, {
+		type: 'bar',
+		data: yearlyOverview,
+		options: {
+			responsive: true,
+			legend: {
+				position: 'top',
+			},
+			title: {
+				display: true,
+				text: 'Baltimore Ravens: Season Record and Violent Crime'
+			},
+			scales: {
+				yAxes:[{
+					ticks: {
+						beginAtZero: true
 					}
-				}
-			});
+				}]
+			},
+			onClick: yearly_to_monthly,
+		}
+	});
 
-		};
+};
 
-		document.getElementById('randomizeData').addEventListener('click', function() {
-			var zero = Math.random() < 0.2 ? true : false;
-			barChartData.datasets.forEach(function(dataset) {
-				dataset.data = dataset.data.map(function() {
-					return zero ? 0.0 : randomScalingFactor();
-				});
 
-			});
-			window.myBar.update();
+function yearly_to_monthly (event, array) {
+	var year = array[0]["_model"]["label"];
+	console.log("You clicked: " + year);
+	window.myBar.destroy();
+	var ctx = document.getElementById('canvas').getContext('2d');
+	window.myBar = new Chart(ctx, {
+		type: 'bar',
+		data: monthly_datasets[year],
+		options: {
+			responsive: true,
+			legend: {
+				position: 'top',
+			},
+			title: {
+				display: true,
+				text: 'Baltimore Ravens: Season Record and Violent Crime'
+			},
+			scales: {
+				yAxes:[{
+					ticks: {
+						beginAtZero: true
+					}
+				}]
+			},
+			onClick: monthly_to_yearly,
+		}
+
+	});
+};
+
+function monthly_to_yearly (event, array) {
+	var year = array[0]["_model"]["label"];
+	console.log("You clicked: " + year);
+	window.myBar.destroy();
+	var ctx = document.getElementById('canvas').getContext('2d');
+	window.myBar = new Chart(ctx, {
+		type: 'bar',
+		data: yearlyOverview,
+		options: {
+			responsive: true,
+			legend: {
+				position: 'top',
+			},
+			title: {
+				display: true,
+				text: 'Baltimore Ravens: Season Record and Violent Crime'
+			},
+			scales: {
+				yAxes:[{
+					ticks: {
+						beginAtZero: true
+					}
+				}]
+			},
+			onClick: yearly_to_monthly,
+		}
+
+	});
+};
+
+/*
+document.getElementById('randomizeData').addEventListener('click', function() {
+	var zero = Math.random() < 0.2 ? true : false;
+	barChartData.datasets.forEach(function(dataset) {
+		dataset.data = dataset.data.map(function() {
+			return zero ? 0.0 : randomScalingFactor();
 		});
 
-		var colorNames = Object.keys(window.chartColors);
-		document.getElementById('addDataset').addEventListener('click', function() {
-			var colorName = colorNames[barChartData.datasets.length % colorNames.length];
-			var dsColor = window.chartColors[colorName];
-			var newDataset = {
-				label: 'Dataset ' + (barChartData.datasets.length + 1),
-				backgroundColor: color(dsColor).alpha(0.5).rgbString(),
-				borderColor: dsColor,
-				borderWidth: 1,
-				data: []
-			};
+	});
+	window.myBar.update();
+});
 
-			for (var index = 0; index < barChartData.labels.length; ++index) {
-				newDataset.data.push(randomScalingFactor());
-			}
+var colorNames = Object.keys(window.chartColors);
+document.getElementById('addDataset').addEventListener('click', function() {
+	var colorName = colorNames[barChartData.datasets.length % colorNames.length];
+	var dsColor = window.chartColors[colorName];
+	var newDataset = {
+		label: 'Dataset ' + (barChartData.datasets.length + 1),
+		backgroundColor: color(dsColor).alpha(0.5).rgbString(),
+		borderColor: dsColor,
+		borderWidth: 1,
+		data: []
+	};
 
-			barChartData.datasets.push(newDataset);
-			window.myBar.update();
-		});
+	for (var index = 0; index < barChartData.labels.length; ++index) {
+		newDataset.data.push(randomScalingFactor());
+	}
+	console.log("yoyoyo");
+	barChartData.datasets.push(newDataset);
+	window.myBar.update();
+});
 
-		document.getElementById('addData').addEventListener('click', function() {
-			if (barChartData.datasets.length > 0) {
-				var month = MONTHS[barChartData.labels.length % MONTHS.length];
-				barChartData.labels.push(month);
+document.getElementById('addData').addEventListener('click', function() {
+	if (barChartData.datasets.length > 0) {
+		var month = MONTHS[barChartData.labels.length % MONTHS.length];
+		barChartData.labels.push(month);
 
-				for (var index = 0; index < barChartData.datasets.length; ++index) {
-					// window.myBar.addData(randomScalingFactor(), index);
-					barChartData.datasets[index].data.push(randomScalingFactor());
-				}
+		for (var index = 0; index < barChartData.datasets.length; ++index) {
+			// window.myBar.addData(randomScalingFactor(), index);
+			barChartData.datasets[index].data.push(randomScalingFactor());
+		}
 
-				window.myBar.update();
-			}
-		});
+		window.myBar.update();
+	}
+});
 
-		document.getElementById('removeDataset').addEventListener('click', function() {
-			barChartData.datasets.pop();
-			window.myBar.update();
-		});
+document.getElementById('removeDataset').addEventListener('click', function() {
+	barChartData.datasets.pop();
+	window.myBar.update();
+});
 
-		document.getElementById('removeData').addEventListener('click', function() {
-			barChartData.labels.splice(-1, 1); // remove the label first
+document.getElementById('removeData').addEventListener('click', function() {
+	barChartData.labels.splice(-1, 1); // remove the label first
 
-			barChartData.datasets.forEach(function(dataset) {
-				dataset.data.pop();
-			});
+	barChartData.datasets.forEach(function(dataset) {
+		dataset.data.pop();
+	});
 
-			window.myBar.update();
-		});
+	window.myBar.update();
+});*/
 	</script>
 </body>
 
