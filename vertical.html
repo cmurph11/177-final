@@ -115,7 +115,7 @@ var color12 = pickColor(2012);
 var yearlyOverview = {
 	labels: ['2012', '2013', '2014', '2015', '2016', '2017', '2018'],
 	datasets: [{
-		label: 'Monthly crime rate per NFL season',
+		label: 'Ravens season win/loss record',
 		borderWidth: 1,
 		data: [
 			avg_crime_rate_by_year[2012],
@@ -142,7 +142,7 @@ var monthly_datasets = {};
 monthly_datasets[2012] = {
 	labels: ['September', 'October', 'November', 'December', 'January', 'February'],
 	datasets: [{
-		label: 'Monthly crime rate during the 2012 NFL season',
+		label: 'Ravens win/loss record during the 2012 NFL season',
 		borderWidth: 1,
 		data: [
 			crime_rate_in(2012, 8),
@@ -157,7 +157,7 @@ monthly_datasets[2012] = {
 monthly_datasets[2013] = {
 	labels: ['September', 'October', 'November', 'December'],
 	datasets: [{
-		label: 'Monthly crime rate during the 2013 NFL season',
+		label: 'Ravens win/loss record during the 2013 NFL season',
 		borderWidth: 1,
 		data: [
 			crime_rate_in(2013, 8),
@@ -170,7 +170,7 @@ monthly_datasets[2013] = {
 monthly_datasets[2014] = {
 	labels: ['September', 'October', 'November', 'December', 'January'],
 	datasets: [{
-		label: 'Monthly crime rate during the 2014 NFL season',
+		label: 'Ravens win/loss record during the 2014 NFL season',
 		borderWidth: 1,
 		data: [
 			crime_rate_in(2014, 8),
@@ -184,7 +184,7 @@ monthly_datasets[2014] = {
 monthly_datasets[2015] = {
 	labels: ['September', 'October', 'November', 'December', 'January'],
 	datasets: [{
-		label: 'Monthly crime rate during the 2015 NFL season',
+		label: 'Ravens win/loss record during the 2015 NFL season',
 		borderWidth: 1,
 		data: [
 			crime_rate_in(2015, 8),
@@ -198,7 +198,7 @@ monthly_datasets[2015] = {
 monthly_datasets[2016] = {
 	labels: ['September', 'October', 'November', 'December', 'January'],
 	datasets: [{
-		label: 'Monthly crime rate during the 2016 NFL season',
+		label: 'Ravens win/loss record during the 2016 NFL season',
 		borderWidth: 1,
 		data: [
 			crime_rate_in(2016, 8),
@@ -212,7 +212,7 @@ monthly_datasets[2016] = {
 monthly_datasets[2017] = {
 	labels: ['September', 'October', 'November', 'December'],
 	datasets: [{
-		label: 'Monthly crime rate during the 2017 NFL season',
+		label: 'Ravens win/loss record during the 2017 NFL season',
 		borderWidth: 1,
 		data: [
 			crime_rate_in(2017, 8),
@@ -229,6 +229,7 @@ window.onload = function() {
 	window.myBar = new Chart(ctx, {
 		type: 'bar',
 		data: yearlyOverview,
+
 		options: {
 			responsive: true,
 			legend: {
@@ -277,6 +278,10 @@ function yearly_to_monthly (event, array) {
 		options: {
 			responsive: true,
 			legend: {
+				labels: {
+					fontSize: 16,
+					fontColor: '#000'
+				},
 				position: 'top',
 			},
 			title: {
