@@ -37,7 +37,7 @@ function crime_rate_in(year, month) {
 		+ crimes[year][month]["ASSAULT BY THREAT"]
 		+ crimes[year][month]["COMMON ASSAULT"]
 		+ crimes[year][month]["HOMICIDE"]
-		+ crimes[year][month]["RAPE"];			
+		+ crimes[year][month]["RAPE"];
 }
 
 // Compute average # of violent crimes per month for a given start month/year
@@ -117,7 +117,7 @@ var yearlyOverview = {
 	datasets: [{
 		label: 'Monthly crime rate per NFL season',
 		borderWidth: 1,
-		data: [ 
+		data: [
 			avg_crime_rate_by_year[2012],
 			avg_crime_rate_by_year[2013],
 			avg_crime_rate_by_year[2014],
@@ -233,13 +233,27 @@ window.onload = function() {
 			responsive: true,
 			legend: {
 				position: 'top',
+				labels: {
+					fontSize: 16,
+					fontColor: '#000'
+				}
 			},
+
 			title: {
 				display: true,
+				fontSize: 18,
+				fontColor: '#000',
 				text: 'Baltimore Ravens: Season Record and Violent Crime'
 			},
+
 			scales: {
 				yAxes:[{
+					scaleLabel: {
+						display: true,
+						fontSize: 18,
+						fontColor: '#000',
+						labelString: 'Average Crimes Per Month (CPM)'
+					},
 					ticks: {
 						beginAtZero: true
 					}
