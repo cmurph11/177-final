@@ -20,7 +20,7 @@
 </head>
 
 <body>
-	<button id="backToYearly" onclick="monthly_to_yearly()">Return to Yearly Overview</button>
+	<button id="backToYearly" style="opacity: 1;" onclick="monthToYear()">Return to Yearly Overview</button>
 	<div id="container" style="width: 75%;">
 		<canvas id="canvas"></canvas>
 	</div>
@@ -218,49 +218,14 @@ monthly_datasets[2017] = {
 }
 
 
-window.onload = function() {
-	var ctx = document.getElementById('canvas').getContext('2d');
-	window.myBar = new Chart(ctx, {
-		type: 'bar',
-		data: yearlyOverview,
+window.onload = loadYearly;
 
-		options: {
-			responsive: true,
-			legend: {
-				position: 'top',
-				labels: {
-					fontSize: 16,
-					fontColor: '#000'
-				}
-			},
+monthToYear = function() {
+	window.myBar.destroy();
+	loadYearly();
+}
 
-			title: {
-				display: true,
-				fontSize: 18,
-				fontColor: '#000',
-				text: 'Baltimore Ravens: Season Record and Violent Crime'
-			},
-
-			scales: {
-				yAxes:[{
-					scaleLabel: {
-						display: true,
-						fontSize: 18,
-						fontColor: '#000',
-						labelString: 'Average Crimes Per Month (CPM)'
-					},
-					ticks: {
-						beginAtZero: true
-					}
-				}]
-			},
-			onClick: yearly_to_monthly,
-		}
-	});
-};
-
-
-function yearly_to_monthly (event, array) {
+function loadMonthly(event, array) {
 	var year = array[0]["_model"]["label"];
 
 	window.myBar.destroy();
@@ -293,38 +258,51 @@ function yearly_to_monthly (event, array) {
 	});
 
 	var backbutton = document.getElementById('backToYearly');
-	backbutton.style.opacity = 1;
+	backbutton.style.display = 'block';
 
 };
 
-function monthly_to_yearly() {
-	window.myBar.destroy();
+function loadYearly() {
 	var ctx = document.getElementById('canvas').getContext('2d');
 	window.myBar = new Chart(ctx, {
 		type: 'bar',
 		data: yearlyOverview,
+
 		options: {
 			responsive: true,
 			legend: {
 				position: 'top',
+				labels: {
+					fontSize: 16,
+					fontColor: '#000'
+				}
 			},
+
 			title: {
 				display: true,
+				fontSize: 18,
+				fontColor: '#000',
 				text: 'Baltimore Ravens: Season Record and Violent Crime'
 			},
+
 			scales: {
 				yAxes:[{
+					scaleLabel: {
+						display: true,
+						fontSize: 18,
+						fontColor: '#000',
+						labelString: 'Average Crimes Per Month\nDuring the NFL Season'
+					},
 					ticks: {
 						beginAtZero: true
 					}
 				}]
 			},
-			onClick: yearly_to_monthly,
+			onClick: loadMonthly
 		}
-
 	});
 	var backbutton = document.getElementById('backToYearly');
-	backbutton.style.opacity = 0;
+	backbutton.style.display = 'none';
 };
 
 
