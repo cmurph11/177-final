@@ -13,20 +13,18 @@
 		-webkit-user-select: none;
 		-ms-user-select: none;
 	}
+	#backToYearly {
+		opacity:0;
+	}
 	</style>
 </head>
 
 <body>
+	<button id="backToYearly" onclick="monthly_to_yearly()">Return to Yearly Overview</button>
 	<div id="container" style="width: 75%;">
 		<canvas id="canvas"></canvas>
 	</div>
-	<button id="randomizeData">Randomize Data</button>
-	<button id="addDataset">Add Dataset</button>
-	<button id="removeDataset">Remove Dataset</button>
-	<button id="addData">Add Data</button>
-	<button id="removeData">Remove Data</button>
 	<script>
-
 
 // load data from file
 var crimes = seasons;
@@ -96,7 +94,6 @@ avg_crime_rate_by_year[2014] = avg_crime_per_month_in(2014, 8, 2015, 0);
 avg_crime_rate_by_year[2015] = avg_crime_per_month_in(2015, 8, 2016, 0);
 avg_crime_rate_by_year[2016] = avg_crime_per_month_in(2016, 8, 2017, 0);
 avg_crime_rate_by_year[2017] = avg_crime_per_month_in(2017, 8, 2017, 11);
-avg_crime_rate_by_year[2018] = avg_crime_per_month_in(2018, 8, 2018, 10);
 
 var season_colors = {};
 
@@ -106,14 +103,13 @@ season_colors[2014] = pickColor(2014);
 season_colors[2015] = pickColor(2015);
 season_colors[2016] = pickColor(2016);
 season_colors[2017] = pickColor(2017);
-season_colors[2018] = pickColor(2018);
 
 
 var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 var color = Chart.helpers.color;
 var color12 = pickColor(2012);
 var yearlyOverview = {
-	labels: ['2012', '2013', '2014', '2015', '2016', '2017', '2018'],
+	labels: ['2012', '2013', '2014', '2015', '2016', '2017'],
 	datasets: [{
 		label: 'Monthly crime rate per NFL season',
 		borderWidth: 1,
@@ -124,7 +120,6 @@ var yearlyOverview = {
 			avg_crime_rate_by_year[2015],
 			avg_crime_rate_by_year[2016],
 			avg_crime_rate_by_year[2017],
-			avg_crime_rate_by_year[2018]
 		],
 		backgroundColor: [
 			season_colors[2012],
@@ -133,7 +128,6 @@ var yearlyOverview = {
 			season_colors[2015],
 			season_colors[2016],
 			season_colors[2017],
-			season_colors[2018]
 		],
 	}]
 };
@@ -262,13 +256,12 @@ window.onload = function() {
 			onClick: yearly_to_monthly,
 		}
 	});
-
 };
 
 
 function yearly_to_monthly (event, array) {
 	var year = array[0]["_model"]["label"];
-	console.log("You clicked: " + year);
+
 	window.myBar.destroy();
 	var ctx = document.getElementById('canvas').getContext('2d');
 	window.myBar = new Chart(ctx, {
@@ -290,15 +283,16 @@ function yearly_to_monthly (event, array) {
 					}
 				}]
 			},
-			onClick: monthly_to_yearly,
 		}
 
 	});
+
+	var backbutton = document.getElementById('backToYearly');
+	backbutton.style.opacity = 1;
+
 };
 
-function monthly_to_yearly (event, array) {
-	var year = array[0]["_model"]["label"];
-	console.log("You clicked: " + year);
+function monthly_to_yearly() {
 	window.myBar.destroy();
 	var ctx = document.getElementById('canvas').getContext('2d');
 	window.myBar = new Chart(ctx, {
@@ -324,68 +318,11 @@ function monthly_to_yearly (event, array) {
 		}
 
 	});
+	var backbutton = document.getElementById('backToYearly');
+	backbutton.style.opacity = 0;
 };
 
-/*
-document.getElementById('randomizeData').addEventListener('click', function() {
-	var zero = Math.random() < 0.2 ? true : false;
-	barChartData.datasets.forEach(function(dataset) {
-		dataset.data = dataset.data.map(function() {
-			return zero ? 0.0 : randomScalingFactor();
-		});
 
-	});
-	window.myBar.update();
-});
-
-var colorNames = Object.keys(window.chartColors);
-document.getElementById('addDataset').addEventListener('click', function() {
-	var colorName = colorNames[barChartData.datasets.length % colorNames.length];
-	var dsColor = window.chartColors[colorName];
-	var newDataset = {
-		label: 'Dataset ' + (barChartData.datasets.length + 1),
-		backgroundColor: color(dsColor).alpha(0.5).rgbString(),
-		borderColor: dsColor,
-		borderWidth: 1,
-		data: []
-	};
-
-	for (var index = 0; index < barChartData.labels.length; ++index) {
-		newDataset.data.push(randomScalingFactor());
-	}
-	console.log("yoyoyo");
-	barChartData.datasets.push(newDataset);
-	window.myBar.update();
-});
-
-document.getElementById('addData').addEventListener('click', function() {
-	if (barChartData.datasets.length > 0) {
-		var month = MONTHS[barChartData.labels.length % MONTHS.length];
-		barChartData.labels.push(month);
-
-		for (var index = 0; index < barChartData.datasets.length; ++index) {
-			// window.myBar.addData(randomScalingFactor(), index);
-			barChartData.datasets[index].data.push(randomScalingFactor());
-		}
-
-		window.myBar.update();
-	}
-});
-
-document.getElementById('removeDataset').addEventListener('click', function() {
-	barChartData.datasets.pop();
-	window.myBar.update();
-});
-
-document.getElementById('removeData').addEventListener('click', function() {
-	barChartData.labels.splice(-1, 1); // remove the label first
-
-	barChartData.datasets.forEach(function(dataset) {
-		dataset.data.pop();
-	});
-
-	window.myBar.update();
-});*/
 	</script>
 </body>
 
