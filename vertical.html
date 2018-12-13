@@ -30,6 +30,10 @@
 var crimes = seasons;
 var stats = scores;
 
+function getScore(year) {
+	return scores[year][0].FINAL;
+}
+
 function crime_rate_in(year, month) {
 	return crimes[year][month]["AGG. ASSAULT"]
 		+ crimes[year][month]["ASSAULT BY THREAT"]
@@ -96,12 +100,12 @@ var yearlyOverview = {
 			borderWidth: 2,
 			fill: false,
 			data: [
-				avg_crime_rate_by_year[2017],
-				avg_crime_rate_by_year[2016],
-				avg_crime_rate_by_year[2015],
-				avg_crime_rate_by_year[2014],
-				avg_crime_rate_by_year[2013],
-				avg_crime_rate_by_year[2012],
+				getScore(2012),
+				getScore(2013),
+				getScore(2014),
+				getScore(2015),
+				getScore(2016),
+				getScore(2017)
 			],
 			borderColor: "#d10808",
 			pointBackgroundColor: "#9b0c0c",
@@ -125,6 +129,8 @@ var yearlyOverview = {
 		backgroundColor: "#282d91"
 	}]
 };
+
+console.log(yearlyOverview)
 
 var monthly_datasets = {};
 monthly_datasets[2012] = {
