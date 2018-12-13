@@ -67,7 +67,6 @@ function average(arr) {
 
 function pickColor(year) {
 	var final = scores[year][0].FINAL-45;
-	console.log()
 	return rgbToHex(255-Math.floor(12*final),Math.floor(12*final),0);
 }
 
@@ -104,6 +103,11 @@ season_colors[2015] = pickColor(2015);
 season_colors[2016] = pickColor(2016);
 season_colors[2017] = pickColor(2017);
 
+var month_colors = {
+	2012: "bees"
+};
+
+console.log(month.colors[2012]);
 
 var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 var color = Chart.helpers.color;
