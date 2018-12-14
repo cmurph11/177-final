@@ -364,12 +364,9 @@ function loadMonthly(event, array) {
 		options: {
 			responsive: true,
 			legend: {
-				labels: {
-					fontSize: 16,
-					fontColor: '#000'
-				},
-				position: 'top',
+				display: false,
 			},
+			
 			title: {
 				display: true,
 				text: 'Baltimore Ravens: ' + year + ' Season Record and Violent Crime'
@@ -413,11 +410,7 @@ function loadYearly() {
 				enabled: false,
 			},
 			legend: {
-				position: 'top',
-				labels: {
-					fontSize: 16,
-					fontColor: '#000'
-				}
+				display: false,
 			},
 
 			title: {
@@ -429,20 +422,36 @@ function loadYearly() {
 
 			scales: {
 				yAxes:[{
+					scaleLabel: {
+						display: true,
+						labelString: "Avg. Crimes per Month in NFL Season",
+						fontColor: "#282d91",
+						fontSize: 20
+					},
+
 					id: "crimes",
 					position: 'left',
 					ticks: {
 						beginAtZero: true,
 						max: 1500,
-						stepSize: 150
+						stepSize: 150,
+						fontColor: "#282d91"
 					}
 				}, {
+					scaleLabel: {
+						display: true,
+						labelString: "Ravens Season Win/Loss Record (%)",
+						fontColor: "#ff9900",
+						fontSize: 20
+					},
+
 					id: "season",
 					position: "right",
 					ticks: {
 						beginAtZero: true,
 						max: 100,
-						min: 0
+						min: 0,
+						fontColor: "#ff9900"
 					}
 				}]
 			},
