@@ -378,7 +378,9 @@ function loadMonthly(event, array) {
 					id: "crimes",
 					position: 'left',
 					ticks: {
-						beginAtZero: true
+						beginAtZero: true,
+						max: 1500,
+						stepSize: 150
 					}
 				}, {
 					id: "season",
@@ -429,7 +431,9 @@ function loadYearly() {
 					id: "crimes",
 					position: 'left',
 					ticks: {
-						beginAtZero: true
+						beginAtZero: true,
+						max: 1500,
+						stepSize: 150
 					}
 				}, {
 					id: "season",
