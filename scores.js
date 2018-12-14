@@ -34,7 +34,7 @@ var scores = {
     "2015": [
         {
             "SEPTEMBER": 0, 
-            "OCTOBER": 0.16, 
+            "OCTOBER": 16, 
             "NOVEMBER": 36.3, 
             "DECEMBER": 50, 
             "JANUARY": 45.4,

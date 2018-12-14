@@ -89,6 +89,8 @@ season_colors[2015] = "#6b30c9";
 season_colors[2016] = "#6b30c9";
 season_colors[2017] = "#6b30c9";
 
+var all_years = [2012, 2013, 2014, 2015, 2016, 2017];
+
 var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 var color = Chart.helpers.color;
 
@@ -96,9 +98,10 @@ var yearlyOverview = {
 	labels: ['2012', '2013', '2014', '2015', '2016', '2017'],
 	datasets: [
 		{
-			label: 'Boop',
+			label: 'Ravens season win/loss ratio',
 			borderWidth: 2,
 			fill: false,
+			yAxisID: "season",
 			data: [
 				getScore(2012),
 				getScore(2013),
@@ -113,11 +116,13 @@ var yearlyOverview = {
 			pointRadius: 5,
 			pointBorderRadius: 8,
 			pointHitRadius: 10,
-			type: 'line'
+			type: 'line',
+			lineTension: 0
 		},
 		{
-		label: 'Ravens season win/loss record',
+		label: 'Average crimes per month during NFL season',
 		borderWidth: 1,
+		yAxisID: "crimes",
 		data: [
 			avg_crime_rate_by_year[2012],
 			avg_crime_rate_by_year[2013],
@@ -130,13 +135,11 @@ var yearlyOverview = {
 	}]
 };
 
-console.log(yearlyOverview)
-
 var monthly_datasets = {};
 monthly_datasets[2012] = {
 	labels: ['September', 'October', 'November', 'December', 'January', 'February'],
 	datasets: [{
-		label: 'Ravens win/loss record during the 2012 NFL season',
+		label: 'Ravens win/loss ratio during the 2012 NFL season',
 		borderWidth: 1,
 		fill: false,
 		data: [
@@ -152,7 +155,7 @@ monthly_datasets[2012] = {
 monthly_datasets[2013] = {
 	labels: ['September', 'October', 'November', 'December'],
 	datasets: [{
-		label: 'Ravens win/loss record during the 2013 NFL season',
+		label: 'Ravens win/loss ratio during the 2013 NFL season',
 		borderWidth: 1,
 		fill: false,
 		data: [
@@ -166,7 +169,7 @@ monthly_datasets[2013] = {
 monthly_datasets[2014] = {
 	labels: ['September', 'October', 'November', 'December', 'January'],
 	datasets: [{
-		label: 'Ravens win/loss record during the 2014 NFL season',
+		label: 'Ravens win/loss ratio during the 2014 NFL season',
 		borderWidth: 1,
 		fill: false,
 		data: [
@@ -181,7 +184,7 @@ monthly_datasets[2014] = {
 monthly_datasets[2015] = {
 	labels: ['September', 'October', 'November', 'December', 'January'],
 	datasets: [{
-		label: 'Ravens win/loss record during the 2015 NFL season',
+		label: 'Ravens win/loss ratio during the 2015 NFL season',
 		borderWidth: 1,
 		fill: false,
 		data: [
@@ -196,7 +199,7 @@ monthly_datasets[2015] = {
 monthly_datasets[2016] = {
 	labels: ['September', 'October', 'November', 'December', 'January'],
 	datasets: [{
-		label: 'Ravens win/loss record during the 2016 NFL season',
+		label: 'Ravens win/loss ratio during the 2016 NFL season',
 		borderWidth: 1,
 		fill: false,
 		data: [
@@ -211,7 +214,7 @@ monthly_datasets[2016] = {
 monthly_datasets[2017] = {
 	labels: ['September', 'October', 'November', 'December'],
 	datasets: [{
-		label: 'Ravens win/loss record during the 2017 NFL season',
+		label: 'Ravens win/loss ratio during the 2017 NFL season',
 		borderWidth: 1,
 		fill: false,
 		data: [
@@ -231,8 +234,7 @@ monthToYear = function() {
 }
 
 function loadMonthly(event, array) {
-	var year = array[0]["_model"]["label"];
-
+	var year = all_years[array[0]["_index"]];
 	window.myBar.destroy();
 	var ctx = document.getElementById('canvas').getContext('2d');
 	window.myBar = new Chart(ctx, {
@@ -249,10 +251,18 @@ function loadMonthly(event, array) {
 			},
 			title: {
 				display: true,
-				text: 'Baltimore Ravens: Season Record and Violent Crime'
+				text: 'Baltimore Ravens: ' + year + ' Season Record and Violent Crime'
 			},
 			scales: {
 				yAxes:[{
+					id: "crimes",
+					position: 'left',
+					ticks: {
+						beginAtZero: true
+					}
+				}, {
+					id: "season",
+					position: "right",
 					ticks: {
 						beginAtZero: true
 					}
@@ -272,7 +282,6 @@ function loadYearly() {
 	window.myBar = new Chart(ctx, {
 		type: 'bar',
 		data: yearlyOverview,
-
 		options: {
 			responsive: true,
 			tooltips: {
@@ -295,18 +304,22 @@ function loadYearly() {
 
 			scales: {
 				yAxes:[{
-					scaleLabel: {
-						display: true,
-						fontSize: 18,
-						fontColor: '#000',
-						labelString: 'Average Crimes Per Month\nDuring the NFL Season'
-					},
+					id: "crimes",
+					position: 'left',
 					ticks: {
 						beginAtZero: true
 					}
+				}, {
+					id: "season",
+					position: "right",
+					ticks: {
+						beginAtZero: true,
+						max: 100,
+						min: 0
+					}
 				}]
 			},
-			onClick: loadMonthly
+			onClick: loadMonthly,
 		}
 	});
 	var backbutton = document.getElementById('backToYearly');
