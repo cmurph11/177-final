@@ -21,10 +21,10 @@
 </head>
 
 <body>
-	<button id="backToYearly" style="opacity: 1;" onclick="monthToYear()">Return to Yearly Overview</button>
 	<div id="container" style="width: 75%;">
 		<canvas id="canvas"></canvas>
 	</div>
+	<button id="backToYearly" style="opacity: 1;" onclick="monthToYear()">Return to Yearly Overview</button>
 	<script>
 
 // load data from file
@@ -148,14 +148,15 @@ monthly_datasets[2012] = {
 			getMonthlyScore("JANUARY", 2012),
 			getMonthlyScore("FEBRUARY", 2012),
 		],
-		borderColor: "#d10808",
-		pointBackgroundColor: "#9b0c0c",
-		pointBorderColor: "#ff5656",
-		pointRadius: 5,
-		pointBorderRadius: 8,
+		borderWidth: 6,
+		borderColor: "#ffcc00",
+		pointBackgroundColor: "#ff9900",
+		pointBorderColor: "#ffcc00",
+		pointRadius: 7,
+		pointBorderRadius: 6,
 		pointHitRadius: 10,
 		type: 'line',
-		lineTension: 0,
+		lineTension: 0
 	},{
 		label: 'Crime rate during the 2012 NFL season',
 		backgroundColor: "#282d91",
@@ -185,14 +186,15 @@ monthly_datasets[2013] = {
 			getMonthlyScore("NOVEMBER", 2013),
 			getMonthlyScore("DECEMBER", 2013),
 		],
-		borderColor: "#d10808",
-		pointBackgroundColor: "#9b0c0c",
-		pointBorderColor: "#ff5656",
-		pointRadius: 5,
-		pointBorderRadius: 8,
+		borderWidth: 6,
+		borderColor: "#ffcc00",
+		pointBackgroundColor: "#ff9900",
+		pointBorderColor: "#ffcc00",
+		pointRadius: 7,
+		pointBorderRadius: 6,
 		pointHitRadius: 10,
 		type: 'line',
-		lineTension: 0,
+		lineTension: 0
 	},{
 		label: 'Crime rate during the 2013 NFL season',
 		borderWidth: 1,
@@ -220,14 +222,15 @@ monthly_datasets[2014] = {
 			getMonthlyScore("DECEMBER", 2014),
 			getMonthlyScore("JANUARY", 2014)
 		],
-		borderColor: "#d10808",
-		pointBackgroundColor: "#9b0c0c",
-		pointBorderColor: "#ff5656",
-		pointRadius: 5,
-		pointBorderRadius: 8,
+		borderWidth: 6,
+		borderColor: "#ffcc00",
+		pointBackgroundColor: "#ff9900",
+		pointBorderColor: "#ffcc00",
+		pointRadius: 7,
+		pointBorderRadius: 6,
 		pointHitRadius: 10,
 		type: 'line',
-		lineTension: 0,
+		lineTension: 0
 	},{
 		label: 'Crime rate during the 2014 NFL season',
 		borderWidth: 1,
@@ -255,14 +258,15 @@ monthly_datasets[2015] = {
 			getMonthlyScore("DECEMBER", 2015),
 			getMonthlyScore("JANUARY", 2015)
 		],
-		borderColor: "#d10808",
-		pointBackgroundColor: "#9b0c0c",
-		pointBorderColor: "#ff5656",
-		pointRadius: 5,
-		pointBorderRadius: 8,
+		borderWidth: 6,
+		borderColor: "#ffcc00",
+		pointBackgroundColor: "#ff9900",
+		pointBorderColor: "#ffcc00",
+		pointRadius: 7,
+		pointBorderRadius: 6,
 		pointHitRadius: 10,
 		type: 'line',
-		lineTension: 0,
+		lineTension: 0
 	},{
 		label: 'Crime rate during the 2015 NFL season',
 		borderWidth: 1,
@@ -290,14 +294,15 @@ monthly_datasets[2016] = {
 			getMonthlyScore("DECEMBER", 2016),
 			getMonthlyScore("JANUARY", 2016)
 		],
-		borderColor: "#d10808",
-		pointBackgroundColor: "#9b0c0c",
-		pointBorderColor: "#ff5656",
-		pointRadius: 5,
-		pointBorderRadius: 8,
+		borderWidth: 6,
+		borderColor: "#ffcc00",
+		pointBackgroundColor: "#ff9900",
+		pointBorderColor: "#ffcc00",
+		pointRadius: 7,
+		pointBorderRadius: 6,
 		pointHitRadius: 10,
 		type: 'line',
-		lineTension: 0,
+		lineTension: 0
 	},{
 		label: 'Crime rate during the 2016 NFL season',
 		borderWidth: 1,
@@ -325,14 +330,15 @@ monthly_datasets[2017] = {
 			getMonthlyScore("DECEMBER", 2017),
 			getMonthlyScore("JANUARY", 2017)
 		],
-		borderColor: "#d10808",
-		pointBackgroundColor: "#9b0c0c",
-		pointBorderColor: "#ff5656",
-		pointRadius: 5,
-		pointBorderRadius: 8,
+		borderWidth: 6,
+		borderColor: "#ffcc00",
+		pointBackgroundColor: "#ff9900",
+		pointBorderColor: "#ffcc00",
+		pointRadius: 7,
+		pointBorderRadius: 6,
 		pointHitRadius: 10,
 		type: 'line',
-		lineTension: 0,
+		lineTension: 0
 	},{
 		label: 'Crime rate during the 2017 NFL season',
 		backgroundColor: "#282d91",
@@ -363,32 +369,64 @@ function loadMonthly(event, array) {
 		data: monthly_datasets[year],
 		options: {
 			responsive: true,
+			tooltips: {
+				enabled: false,
+			},
 			legend: {
 				display: false,
 			},
-			
+
 			title: {
 				display: true,
+				fontSize: 18,
+				fontColor: '#000',
 				text: 'Baltimore Ravens: ' + year + ' Season Record and Violent Crime'
 			},
+
 			scales: {
+				xAxes:[{
+					scaleLabel: {
+						display: true,
+						labelString: "Month",
+						fontColor: "#000",
+						fontSize: 20
+					}
+				}],
 				yAxes:[{
-					id: "crimes",
-					position: 'left',
-					ticks: {
-						beginAtZero: true,
-						max: 1500,
-						stepSize: 150
+						scaleLabel: {
+							display: true,
+							labelString: "Avg. Crimes per Month in NFL Season",
+							fontColor: "#282d91",
+							fontSize: 20
+						},
+
+						id: "crimes",
+						position: 'left',
+						ticks: {
+							beginAtZero: true,
+							max: 1500,
+							stepSize: 150,
+							fontColor: "#282d91"
+						}
+					},
+					{
+						scaleLabel: {
+							display: true,
+							labelString: "Ravens Season Win/Loss Record (%)",
+							fontColor: "#ff9900",
+							fontSize: 20
+						},
+
+						id: "season",
+						position: "right",
+						ticks: {
+							beginAtZero: true,
+							max: 100,
+							min: 0,
+							fontColor: "#ff9900"
+						}
 					}
-				}, {
-					id: "season",
-					position: "right",
-					ticks: {
-						beginAtZero: true,
-						max: 100,
-						min: 0
-					}
-				}]
+				]
 			},
 		}
 
@@ -420,40 +458,50 @@ function loadYearly() {
 				text: 'Baltimore Ravens: Season Record and Violent Crime'
 			},
 
-			scales: {
+			scales:{
+				xAxes:[{
+					scaleLabel: {
+						display: true,
+						labelString: "NFL Season",
+						fontColor: "#000",
+						fontSize: 20
+					}
+				}],
 				yAxes:[{
-					scaleLabel: {
-						display: true,
-						labelString: "Avg. Crimes per Month in NFL Season",
-						fontColor: "#282d91",
-						fontSize: 20
-					},
+						scaleLabel: {
+							display: true,
+							labelString: "Avg. Crimes per Month in NFL Season",
+							fontColor: "#282d91",
+							fontSize: 20
+						},
 
-					id: "crimes",
-					position: 'left',
-					ticks: {
-						beginAtZero: true,
-						max: 1500,
-						stepSize: 150,
-						fontColor: "#282d91"
-					}
-				}, {
-					scaleLabel: {
-						display: true,
-						labelString: "Ravens Season Win/Loss Record (%)",
-						fontColor: "#ff9900",
-						fontSize: 20
+						id: "crimes",
+						position: 'left',
+						ticks: {
+							beginAtZero: true,
+							max: 1500,
+							stepSize: 150,
+							fontColor: "#282d91"
+						}
 					},
+					{
+						scaleLabel: {
+							display: true,
+							labelString: "Ravens Season Win/Loss Record (%)",
+							fontColor: "#ff9900",
+							fontSize: 20
+						},
 
-					id: "season",
-					position: "right",
-					ticks: {
-						beginAtZero: true,
-						max: 100,
-						min: 0,
-						fontColor: "#ff9900"
+						id: "season",
+						position: "right",
+						ticks: {
+							beginAtZero: true,
+							max: 100,
+							min: 0,
+							fontColor: "#ff9900"
+						}
 					}
-				}]
+				]
 			},
 			onClick: loadMonthly,
 			onHover: function(event,elements) {
