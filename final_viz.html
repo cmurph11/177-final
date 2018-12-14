@@ -1,0 +1,288 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>Baltimore Crime & NFL Football</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.bundle.js"></script>
+	<script src = "https://www.chartjs.org/samples/latest/utils.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script lang = "javascript" src = "scores.js"></script>
+	<script lang = "javascript" src = "crimes_parsed.js"></script>
+	<script lang = "javascript" src = "datasets.js"></script>
+	<style>
+	canvas {
+		-moz-user-select: none;
+		-webkit-user-select: none;
+		-ms-user-select: none;
+	}
+	#backToYearly {
+		display:block;
+		margin-top:7em;
+		background: rgba(255, 204, 0, .7);
+		color: black;
+		font-weight:bold;
+		padding:1em;
+		border:none;
+		border-left:2px solid #ff9900;
+		cursor: pointer;
+	}
+	</style>
+</head>
+
+<body>
+	<div id="container" style="width: 75%;">
+		<canvas id="canvas"></canvas>
+	</div>
+	<button id="backToYearly" onclick="monthToYear()">Return to Yearly Overview</button>
+	<script>
+
+
+window.onload = loadYearly;
+
+monthToYear = function() {
+	window.myBar.destroy();
+	loadYearly();
+}
+
+
+function stackMonthly(event, array) {
+	window.myBar.destroy();
+	var year = array[1]["_model"]["datasetLabel"]; 
+	var ctx = document.getElementById('canvas').getContext('2d');
+	window.myBar = new Chart(ctx, {
+		type: 'bar',
+		data: monthly_stacked[year],
+
+		options: {
+			responsive: true,
+			tooltips: {
+				enabled: false,
+			},
+			hover: {
+      			onHover: function(elem) {
+        			$("#canvas").css("cursor", "default");
+      			}
+    		},
+			legend: {
+				display: true,
+				position: "bottom",
+			},
+			title: {
+				display: true,
+				fontSize: 18,
+				fontColor: '#000',
+				text: 'Baltimore Ravens: ' + year + ' Season Record and Violent Crime: By Crime'
+			},
+
+			scales: {
+				xAxes: [{
+					stacked: true
+				}],
+				yAxes:[{
+						scaleLabel: {
+							display: true,
+							labelString: "Avg. Crimes per Month",
+							fontColor: "#282d91",
+							fontSize: 20
+						},
+						stacked: true,
+						id: "crimes",
+						position: 'left',
+						ticks: {
+							beginAtZero: true,
+							max: 1500,
+							stepSize: 150,
+							fontColor: "#282d91"
+						}
+					},
+					{
+						scaleLabel: {
+							display: true,
+							labelString: "Ravens Season Record (% Won)",
+							fontColor: "#ff9900",
+							fontSize: 20
+						},
+
+						id: "season",
+						position: "right",
+						ticks: {
+							beginAtZero: true,
+							max: 100,
+							min: 0,
+							fontColor: "#ff9900"
+						}
+					}
+				]
+			},
+		}
+
+	});
+
+}
+
+function loadMonthly(event, array) {
+	var year = all_years[array[0]["_index"]];
+	window.myBar.destroy();
+	var ctx = document.getElementById('canvas').getContext('2d');
+	window.myBar = new Chart(ctx, {
+		type: 'bar',
+		data: monthly_datasets[year],
+		options: {
+			responsive: true,
+			tooltips: {
+				enabled: false,
+			},
+			legend: {
+				display: false,
+			},
+			onClick: stackMonthly,
+			hover: {
+      			onHover: function(elem) {
+        			$("#canvas").css("cursor", elem[0] ? "pointer" : "default");
+      			}
+    		},
+			title: {
+				display: true,
+				fontSize: 18,
+				fontColor: '#000',
+				text: 'Baltimore Ravens: ' + year + ' Season Record and Violent Crime'
+			},
+
+			scales: {
+				xAxes:[{
+					scaleLabel: {
+						display: true,
+						labelString: "Month",
+						fontColor: "#000",
+						fontSize: 20
+					}
+				}],
+				yAxes:[{
+						scaleLabel: {
+							display: true,
+							labelString: "Avg. Crimes per Month",
+							fontColor: "#282d91",
+							fontSize: 20
+						},
+
+						id: "crimes",
+						position: 'left',
+						ticks: {
+							beginAtZero: true,
+							max: 1500,
+							stepSize: 150,
+							fontColor: "#282d91"
+						}
+					},
+					{
+						scaleLabel: {
+							display: true,
+							labelString: "Ravens Season Record (% Won)",
+							fontColor: "#ff9900",
+							fontSize: 20
+						},
+
+						id: "season",
+						position: "right",
+						ticks: {
+							beginAtZero: true,
+							max: 100,
+							min: 0,
+							fontColor: "#ff9900"
+						}
+					}
+				]
+			},
+		}
+
+	});
+
+	var backbutton = document.getElementById('backToYearly');
+	backbutton.style.display = 'block';
+
+};
+
+function loadYearly() {
+	var ctx = document.getElementById('canvas').getContext('2d');
+	window.myBar = new Chart(ctx, {
+		type: 'bar',
+		data: yearlyOverview,
+		options: {
+			responsive: true,
+			tooltips: {
+				enabled: false,
+			},
+			legend: {
+				display: false,
+			},
+			hover: {
+      			onHover: function(elem) {
+        			$("#canvas").css("cursor", elem[0] ? "pointer" : "default");
+      			}
+    		},
+			title: {
+				display: true,
+				fontSize: 18,
+				fontColor: '#000',
+				text: 'Baltimore Ravens: Season Record and Violent Crime'
+			},
+
+			scales:{
+				xAxes:[{
+					scaleLabel: {
+						display: true,
+						labelString: "NFL Season",
+						fontColor: "#000",
+						fontSize: 20
+					}
+				}],
+				yAxes:[{
+						scaleLabel: {
+							display: true,
+							labelString: "Avg. Crimes per Month",
+							fontColor: "#282d91",
+							fontSize: 20
+						},
+
+						id: "crimes",
+						position: 'left',
+						ticks: {
+							beginAtZero: true,
+							max: 1500,
+							stepSize: 150,
+							fontColor: "#282d91"
+						}
+					},
+					{
+						scaleLabel: {
+							display: true,
+							labelString: "Ravens Season Record (% Won)",
+							fontColor: "#ff9900",
+							fontSize: 20
+						},
+
+						id: "season",
+						position: "right",
+						ticks: {
+							beginAtZero: true,
+							max: 100,
+							min: 0,
+							fontColor: "#ff9900"
+						}
+					}
+				]
+			},
+			onClick: loadMonthly,
+			onHover: function(event,elements) {
+    			$("body").css("cursor", elements[0] ? "pointer" : "default");
+  			}
+		}
+	});
+	var backbutton = document.getElementById('backToYearly');
+	backbutton.style.display = 'none';
+};
+
+</script>
+</body>
+
+</html>
