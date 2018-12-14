@@ -5,6 +5,7 @@
 	<title>Bar Chart</title>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.bundle.js"></script>
 	<script src = "https://www.chartjs.org/samples/latest/utils.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script lang = "javascript" src = "crimes_parsed.js"></script>
 	<script lang = "javascript" src = "scores.js"></script>
 	<style>
@@ -32,6 +33,10 @@ var stats = scores;
 
 function getScore(year) {
 	return scores[year][0].FINAL;
+}
+
+function getMonthlyScore(month, year) {
+	return scores[year][0][month];
 }
 
 function crime_rate_in(year, month) {
@@ -80,19 +85,10 @@ avg_crime_rate_by_year[2015] = avg_crime_per_month_in(2015, 8, 2016, 0);
 avg_crime_rate_by_year[2016] = avg_crime_per_month_in(2016, 8, 2017, 0);
 avg_crime_rate_by_year[2017] = avg_crime_per_month_in(2017, 8, 2017, 11);
 
-var season_colors = {};
-
-season_colors[2012] = "#6b30c9";
-season_colors[2013] = "#6b30c9";
-season_colors[2014] = "#6b30c9";
-season_colors[2015] = "#6b30c9";
-season_colors[2016] = "#6b30c9";
-season_colors[2017] = "#6b30c9";
-
 var all_years = [2012, 2013, 2014, 2015, 2016, 2017];
 
 var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-var color = Chart.helpers.color;
+//var color = Chart.helpers.color;
 
 var yearlyOverview = {
 	labels: ['2012', '2013', '2014', '2015', '2016', '2017'],
@@ -138,8 +134,30 @@ var yearlyOverview = {
 var monthly_datasets = {};
 monthly_datasets[2012] = {
 	labels: ['September', 'October', 'November', 'December', 'January', 'February'],
-	datasets: [{
-		label: 'Ravens win/loss ratio during the 2012 NFL season',
+	datasets: [	{
+		label: 'Ravens win/loss record during 2012 NFL season',
+		borderWidth: 2,
+		fill: false,
+		yAxisID: "season",
+		data: [
+			getMonthlyScore("SEPTEMBER", 2012),
+			getMonthlyScore("OCTOBER", 2012),
+			getMonthlyScore("NOVEMBER", 2012),
+			getMonthlyScore("DECEMBER", 2012),
+			getMonthlyScore("JANUARY", 2012),
+			getMonthlyScore("FEBRUARY", 2012),
+		],
+		borderColor: "#d10808",
+		pointBackgroundColor: "#9b0c0c",
+		pointBorderColor: "#ff5656",
+		pointRadius: 5,
+		pointBorderRadius: 8,
+		pointHitRadius: 10,
+		type: 'line',
+		lineTension: 0,
+	},{
+		label: 'Crime rate during the 2012 NFL season',
+		backgroundColor: "#282d91",
 		borderWidth: 1,
 		fill: false,
 		data: [
@@ -154,10 +172,31 @@ monthly_datasets[2012] = {
 };
 monthly_datasets[2013] = {
 	labels: ['September', 'October', 'November', 'December'],
-	datasets: [{
-		label: 'Ravens win/loss ratio during the 2013 NFL season',
+	backgroundColor: "#282d91",
+	datasets: [
+	  {label: 'Ravens win/loss record during 2013 NFL season',
+		borderWidth: 2,
+		fill: false,
+		yAxisID: "season",
+		data: [
+			getMonthlyScore("SEPTEMBER", 2013),
+			getMonthlyScore("OCTOBER", 2013),
+			getMonthlyScore("NOVEMBER", 2013),
+			getMonthlyScore("DECEMBER", 2013),
+		],
+		borderColor: "#d10808",
+		pointBackgroundColor: "#9b0c0c",
+		pointBorderColor: "#ff5656",
+		pointRadius: 5,
+		pointBorderRadius: 8,
+		pointHitRadius: 10,
+		type: 'line',
+		lineTension: 0,
+	},{
+		label: 'Crime rate during the 2013 NFL season',
 		borderWidth: 1,
 		fill: false,
+		backgroundColor: "#282d91",
 		data: [
 			crime_rate_in(2013, 8),
 			crime_rate_in(2013, 9),
@@ -168,9 +207,30 @@ monthly_datasets[2013] = {
 }
 monthly_datasets[2014] = {
 	labels: ['September', 'October', 'November', 'December', 'January'],
-	datasets: [{
-		label: 'Ravens win/loss ratio during the 2014 NFL season',
+	datasets: [
+	  {label: 'Ravens win/loss record during 2014 NFL season',
+		borderWidth: 2,
+		fill: false,
+		yAxisID: "season",
+		data: [
+			getMonthlyScore("SEPTEMBER", 2014),
+			getMonthlyScore("OCTOBER", 2014),
+			getMonthlyScore("NOVEMBER", 2014),
+			getMonthlyScore("DECEMBER", 2014),
+			getMonthlyScore("JANUARY", 2014)
+		],
+		borderColor: "#d10808",
+		pointBackgroundColor: "#9b0c0c",
+		pointBorderColor: "#ff5656",
+		pointRadius: 5,
+		pointBorderRadius: 8,
+		pointHitRadius: 10,
+		type: 'line',
+		lineTension: 0,
+	},{
+		label: 'Crime rate during the 2014 NFL season',
 		borderWidth: 1,
+		backgroundColor: "#282d91",
 		fill: false,
 		data: [
 			crime_rate_in(2014, 8),
@@ -183,9 +243,29 @@ monthly_datasets[2014] = {
 }
 monthly_datasets[2015] = {
 	labels: ['September', 'October', 'November', 'December', 'January'],
-	datasets: [{
-		label: 'Ravens win/loss ratio during the 2015 NFL season',
+	datasets: [{label: 'Ravens win/loss record during 2015 NFL season',
+		borderWidth: 2,
+		fill: false,
+		yAxisID: "season",
+		data: [
+			getMonthlyScore("SEPTEMBER", 2015),
+			getMonthlyScore("OCTOBER", 2015),
+			getMonthlyScore("NOVEMBER", 2015),
+			getMonthlyScore("DECEMBER", 2015),
+			getMonthlyScore("JANUARY", 2015)
+		],
+		borderColor: "#d10808",
+		pointBackgroundColor: "#9b0c0c",
+		pointBorderColor: "#ff5656",
+		pointRadius: 5,
+		pointBorderRadius: 8,
+		pointHitRadius: 10,
+		type: 'line',
+		lineTension: 0,
+	},{
+		label: 'Crime rate during the 2015 NFL season',
 		borderWidth: 1,
+		backgroundColor: "#282d91",
 		fill: false,
 		data: [
 			crime_rate_in(2015, 8),
@@ -198,10 +278,30 @@ monthly_datasets[2015] = {
 }
 monthly_datasets[2016] = {
 	labels: ['September', 'October', 'November', 'December', 'January'],
-	datasets: [{
-		label: 'Ravens win/loss ratio during the 2016 NFL season',
+	datasets: [{label: 'Ravens win/loss record during 2016 NFL season',
+		borderWidth: 2,
+		fill: false,
+		yAxisID: "season",
+		data: [
+			getMonthlyScore("SEPTEMBER", 2016),
+			getMonthlyScore("OCTOBER", 2016),
+			getMonthlyScore("NOVEMBER", 2016),
+			getMonthlyScore("DECEMBER", 2016),
+			getMonthlyScore("JANUARY", 2016)
+		],
+		borderColor: "#d10808",
+		pointBackgroundColor: "#9b0c0c",
+		pointBorderColor: "#ff5656",
+		pointRadius: 5,
+		pointBorderRadius: 8,
+		pointHitRadius: 10,
+		type: 'line',
+		lineTension: 0,
+	},{
+		label: 'Crime rate during the 2016 NFL season',
 		borderWidth: 1,
 		fill: false,
+		backgroundColor: "#282d91",
 		data: [
 			crime_rate_in(2016, 8),
 			crime_rate_in(2016, 9),
@@ -213,8 +313,28 @@ monthly_datasets[2016] = {
 }
 monthly_datasets[2017] = {
 	labels: ['September', 'October', 'November', 'December'],
-	datasets: [{
-		label: 'Ravens win/loss ratio during the 2017 NFL season',
+	datasets: [{label: 'Ravens win/loss record during 2017 NFL season',
+		borderWidth: 2,
+		fill: false,
+		yAxisID: "season",
+		data: [
+			getMonthlyScore("SEPTEMBER", 2017),
+			getMonthlyScore("OCTOBER", 2017),
+			getMonthlyScore("NOVEMBER", 2017),
+			getMonthlyScore("DECEMBER", 2017),
+			getMonthlyScore("JANUARY", 2017)
+		],
+		borderColor: "#d10808",
+		pointBackgroundColor: "#9b0c0c",
+		pointBorderColor: "#ff5656",
+		pointRadius: 5,
+		pointBorderRadius: 8,
+		pointHitRadius: 10,
+		type: 'line',
+		lineTension: 0,
+	},{
+		label: 'Crime rate during the 2017 NFL season',
+		backgroundColor: "#282d91",
 		borderWidth: 1,
 		fill: false,
 		data: [
@@ -264,7 +384,9 @@ function loadMonthly(event, array) {
 					id: "season",
 					position: "right",
 					ticks: {
-						beginAtZero: true
+						beginAtZero: true,
+						max: 100,
+						min: 0
 					}
 				}]
 			},
@@ -320,6 +442,9 @@ function loadYearly() {
 				}]
 			},
 			onClick: loadMonthly,
+			onHover: function(event,elements) {
+    			$("body").css("cursor", elements[0] ? "pointer" : "default");
+  			}
 		}
 	});
 	var backbutton = document.getElementById('backToYearly');
