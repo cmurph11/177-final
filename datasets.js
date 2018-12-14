@@ -920,7 +920,7 @@ monthly_stacked["2017"] = {
 	},
 	{
 		label: 'Rape',
-		backgroundColor: "#040000",
+		backgroundColor: crime_colors["RAPE"],
 		borderWidth: 1,
 		stack: "rape",
 		fill: false,
