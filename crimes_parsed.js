@@ -1,4 +1,4 @@
-var data = {
+var seasons = {
     "2012": [
         {
             "AGG. ASSAULT": 374,
