@@ -331,11 +331,11 @@ monthly_datasets[2017] = {
 
 /// MONTHLY CHART: STACKED VERSION
 var crime_colors = {
-	"RAPE": "#040000", 
-	"HOMICIDE":  "#404af9", 
-	"AGG. ASSAULT": "#f2317f", 
-	"COMMON ASSAULT": "#853475", 
-	"ASSAULT BY THREAT": "#9f2405"
+	"RAPE": "#98C926", 
+	"HOMICIDE":  "#03B5AA", 
+	"AGG. ASSAULT": "#7A306C", 
+	"COMMON ASSAULT": "#0C1B33", 
+	"ASSAULT BY THREAT": "#B2AA8E"
 }
 
 
